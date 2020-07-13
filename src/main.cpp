@@ -1,6 +1,7 @@
-#include <iostream>
+#include "main_loop.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    MainLoop::init();
+    MainLoop::runGame();
     return 0;
 }
