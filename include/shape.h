@@ -2,10 +2,7 @@
 // Created by magicgh on 7/14/2020.
 //
 
-#ifndef LANDLORD_AI_SHAPE_H
-#define LANDLORD_AI_SHAPE_H
-
-#endif //LANDLORD_AI_SHAPE_H
+#pragma once
 
 
 typedef struct Point {

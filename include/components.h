@@ -5,10 +5,9 @@
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \landlord-ai\include\components.h
- */ 
+ */
 
-#ifndef COMPONENTS_H
-#define COMPONENTS_H
+#pragma once
 
 #include "components/button.h"
 #include "components/image.h"

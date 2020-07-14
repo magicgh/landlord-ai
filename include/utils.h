@@ -5,9 +5,6 @@
  * @LastEditors: Please set LastEditors
  * @Description:
  * @FilePath: \landlord-ai\include\utils.h
- */ 
+ */
 
-#ifndef UNTILS_H
-#define UNTILS_H
-
-#endif
+#pragma once
