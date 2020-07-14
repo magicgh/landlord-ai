@@ -5,10 +5,9 @@
  * @LastEditors: Eric Feng
  * @Description: Image class
  * @FilePath: \landlord-ai\include\components\image.h
- */ 
+ */
 
-#ifndef COMPONENTS_IMAGE_H
-#define COMPONENTS_IMAGE_H
+#pragma once
 
 #include "graphics.h"
 #include "shape.h"
@@ -30,5 +29,3 @@ private:
     PIMAGE img_;
     Point pos_;
 };
-
-#endif

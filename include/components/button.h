@@ -5,9 +5,6 @@
  * @LastEditors: Please set LastEditors
  * @Description:
  * @FilePath: \landlord-ai\include\components\button.h
- */ 
+ */
 
-#ifndef COMPONENTS_BUTTON_H
-#define COMPONENTS_BUTTON_H
-
-#endif
+#pragma once

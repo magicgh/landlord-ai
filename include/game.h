@@ -6,9 +6,10 @@
 #pragma once
 
 
+#include "game.h"
+#include <graphics.h>
 #include "constant.h"
 #include "scene.h"
-#include <graphics.h>
 
 void gameInit();
 void gameMain();

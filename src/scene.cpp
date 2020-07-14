@@ -29,3 +29,19 @@ EndScene::EndScene() {
 void EndScene::draw() {
 
 }
+
+ExplainScene::ExplainScene() {
+
+}
+
+void ExplainScene::draw() {
+
+}
+
+EndScene::EndScene() {
+
+}
+
+void EndScene::draw() {
+
+}
