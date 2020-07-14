@@ -2,7 +2,7 @@
 // Created by magicgh on 7/14/2020.
 //
 
-#include <game.h>
+#include "game.h"
 
 
 StartScene start_scene;
@@ -12,7 +12,7 @@ ExplainScene explain_scene;
 Scene *current_scene=&start_scene;
 
 
-void init (){
+void gameInit (){
     initgraph(WIDTH,HEIGHT,0x0);
     setcaption(TITLE);
     setbkcolor(WHITE);
@@ -22,7 +22,7 @@ void init (){
 }
 
 
-void main() {
+void gameMain() {
 
 
     for(;is_run() ; delay_fps(FPS)) {

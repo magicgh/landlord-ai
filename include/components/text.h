@@ -1,7 +1,7 @@
 /*
  * @Author:
  * @Date: 2020-07-13 16:19:53
- * @LastEditTime: 2020-07-13 16:24:19
+ * @LastEditTime: 2020-07-14 17:23:41
  * @LastEditors: Please set LastEditors
  * @Description: 
  * @FilePath: \landlord-ai\include\components\text.h
@@ -9,5 +9,9 @@
 
 #ifndef COMPONENTS_TEXT_H
 #define COMPONENTS_TEXT_H
+
+class _text{
+
+};
 
 #endif

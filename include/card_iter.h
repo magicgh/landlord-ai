@@ -1,8 +1,8 @@
 /*
  * @Author: Eric Feng
  * @Date: 2020-07-13 15:57:29
- * @LastEditTime: 2020-07-14 11:38:32
- * @LastEditors: Eric Feng
+ * @LastEditTime: 2020-07-14 17:27:50
+ * @LastEditors: Please set LastEditors
  * @Description: Cardgroup manager.
  * @FilePath: \landlord-ai\include\card_iter.h
  */
@@ -48,6 +48,3 @@ private:
     Card cards_[CARDS_COUNT];   // Card group
     uint card_idx_;              // Index of the card dealed
 };
-
-
-#endif
