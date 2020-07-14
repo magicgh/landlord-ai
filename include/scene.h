@@ -1,46 +1,61 @@
-//
-// Created by magicgh on 7/14/2020.
-//
-
 #pragma once
-
+#include<graphics.h>
 
 class Scene{
 protected:
 public:
     Scene() = default;
     ~Scene() = default;
-
     virtual void draw()=0;
+    virtual int button() const{return 0;};
 };
 
 class StartScene : public Scene {
+private:
+    const char *img_file_path = "static\\start_scene.png";
+    PIMAGE img;
 public:
-    StartScene();
+    StartScene() = default;
 
     void draw() override;
+
+    int button();
 };
 
 class GameScene : public Scene {
+private:
+    const char *img_file_path = "static\\game_scene.png";
+    PIMAGE img;
 public:
-    GameScene();
+    GameScene() = default;
 
     void draw() override;
+
+    int button();
 };
 
 class EndScene : public Scene {
+private:
+    const char *img_file_path = "static\\end_scene.png";
+    PIMAGE img;
 public:
-    EndScene();
+    EndScene() = default;
 
     void draw() override;
 
     void restart();
+
+    int button();
 };
 
 class ExplainScene : public Scene {
+private:
+    const char *img_file_path = "static\\start_scene.png";
+    PIMAGE img;
 public:
-    ExplainScene();
+    ExplainScene() = default;
 
     void draw() override;
 
+    int button();
 };
