@@ -1,9 +1,9 @@
 /*
- * @Author: your name
+ * @Author: Eric Feng
  * @Date: 2020-07-13 16:14:10
- * @LastEditTime: 2020-07-13 16:24:07
+ * @LastEditTime: 2020-07-14 22:33:10
  * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
+ * @Description: Components
  * @FilePath: \landlord-ai\include\components.h
  */
 
@@ -13,5 +13,3 @@
 #include "components/image.h"
 #include "components/window.h"
 #include "components/text.h"
-
-#endif
