@@ -11,3 +11,4 @@ const char* TITLE = "Landlord";
 const int HEIGHT = 1000;
 const int WIDTH = 500;
 const int FPS = 40;
+const int POKER_NUM = 54;
