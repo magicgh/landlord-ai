@@ -38,10 +38,3 @@ void ExplainScene::draw() {
 
 }
 
-EndScene::EndScene() {
-
-}
-
-void EndScene::draw() {
-
-}

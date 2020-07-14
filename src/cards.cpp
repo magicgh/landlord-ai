@@ -11,11 +11,11 @@ Cards::Cards() {
     reset();
 }
 void Cards::shuffle() {
-    default_random_engine generator (time(nullptr));
-    uniform_int_distribution<unsigned int> u(i, POKER_NUM-1);
+    std::default_random_engine generator (time(nullptr));
+    std::uniform_int_distribution<unsigned int> u(0, POKER_NUM-1);
     for (int i = 1; i < 54; i++){
         int index = u(generator);
-        swap(card[i], card[index]);
+        std::swap(card[i], card[index]);
     }
 }
 

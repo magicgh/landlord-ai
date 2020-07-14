@@ -2,7 +2,8 @@
 
 int main() {
 
-    gameInit();
+    Game game;
+    game.main();
 
     return 0;
 }

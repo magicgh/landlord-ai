@@ -6,14 +6,13 @@
 
 const char* TITLE = "Landlord";
 
-StartScene start_scene;
-GameScene game_scene;
-EndScene end_scene;
-ExplainScene explain_scene;
-Scene *current_scene=&start_scene;
 
 
-void gameInit (){
+Game::Game() {
+    current_scene = &start_scene;
+    landlord = current_player = last_player = -1;
+}
+void Game::init(){
     initgraph(WIDTH,HEIGHT,0x0);
     setcaption(TITLE);
     setbkcolor(WHITE);
@@ -23,12 +22,11 @@ void gameInit (){
 }
 
 
-void gameMain() {
-
+void Game::main(){
+    init();
     for(;is_run() ; delay_fps(FPS)) {
         cleardevice();
         current_scene->draw();
     }
-
     closegraph();
 }

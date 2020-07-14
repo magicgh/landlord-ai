@@ -6,7 +6,7 @@
 #include <map>
 #include <set>
 enum Type{
-    Unknown, //未知
+    Void, //空
     Single, //单张
     Double, //对子
     Three, //三条
@@ -21,16 +21,16 @@ enum Type{
 class CardSet{
 private:
     std::map<int,int> card_set;
-    std::set<int> card;
+    std::set<int> cards;
     Type type;
     int value, cnt;
 public:
     CardSet();
     CardSet(Type t, int val);
-    CardSet& operator = (CardSet &t);
+    CardSet& operator = (const CardSet &t);
     void add(int num);
     void remove(int num);
     void reset();
-    constexpr int convert(int num);
+    static int convert(int num);
     // 0-53 转换为 3-17, A(14), B(15), 小王(16), 大王(17)
 };
