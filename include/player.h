@@ -5,10 +5,9 @@
  * @LastEditors: Please set LastEditors
  * @Description: 
  * @FilePath: \landlord-ai\include\player.h
- */ 
+ */
 
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 
 class Player {

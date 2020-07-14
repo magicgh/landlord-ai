@@ -1,31 +1,46 @@
-/*
- * @Author: XuanLi
- * @Date: 2020-07-13 15:54:40
- * @LastEditTime: 2020-07-13 16:10:15
- * @LastEditors: Please set LastEditors
- * @Description:
- * @FilePath: \landlord-ai\include\scene.h
- */
+//
+// Created by magicgh on 7/14/2020.
+//
 
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
-/*
- * Scene:  void BeginMenu: get the begin menu
- *         void QuitGame: quit
- *         void Game: start a game
- *         void GameExplain: explain how to play the game
- *
- */
-class Scene {
+
+class Scene{
+protected:
 public:
-    void BeginMenu();
-    void Game();
-    void QuitGame();
-    void GameExplain();
-private:
-    int menu_choice;
+    Scene() = default;
+    ~Scene() = default;
+
+    virtual void draw()=0;
 };
 
+class StartScene : public Scene {
+public:
+    StartScene();
 
-#endif
+    void draw() override;
+};
+
+class GameScene : public Scene {
+public:
+    GameScene();
+
+    void draw() override;
+};
+
+class EndScene : public Scene {
+public:
+    EndScene();
+
+    void draw() override;
+
+    void restart();
+};
+
+class ExplainScene : public Scene {
+public:
+    ExplainScene();
+
+    void draw() override;
+
+};

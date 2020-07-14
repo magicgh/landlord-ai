@@ -1,11 +1,8 @@
-#include "card_iter.h"
-#include <iostream>
+#include "game.h"
 
 int main() {
-    CardIter card_manager;
-    card_manager.Shuffle();
-    for(int i = 0; i < CARDS_COUNT; ++i) {
-        std::cout << card_manager.DealCard() << std::endl;
-    }
+
+    Game::main();
+
     return 0;
 }

@@ -5,10 +5,9 @@
  * @LastEditors: Eric Feng
  * @Description: Cardgroup manager.
  * @FilePath: \landlord-ai\include\card_iter.h
- */ 
+ */
 
-#ifndef CARD_ITER_H
-#define CARD_ITER_H
+#pragma once
 
 #define CARDS_COUNT 54
 
