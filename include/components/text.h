@@ -5,9 +5,6 @@
  * @LastEditors: Please set LastEditors
  * @Description: 
  * @FilePath: \landlord-ai\include\components\text.h
- */ 
+ */
 
-#ifndef COMPONENTS_TEXT_H
-#define COMPONENTS_TEXT_H
-
-#endif
+#pragma once

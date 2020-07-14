@@ -5,9 +5,6 @@
  * @LastEditors: Please set LastEditors
  * @Description:
  * @FilePath: \landlord-ai\include\components\window.h
- */ 
+ */
 
-#ifndef COMPONENTS_WINDOW_H
-#define COMPONENTS_WINDOW_H
-
-#endif
+#pragma once
