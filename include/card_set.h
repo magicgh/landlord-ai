@@ -6,7 +6,7 @@
 #include <map>
 #include <set>
 enum Type{
-    Unknown, //未知
+    Void, //空
     Single, //单张
     Double, //对子
     Three, //三条

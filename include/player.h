@@ -8,6 +8,7 @@
  */
 
 #pragma once
+#include <vector>
 #include "card_set.h"
 
 class Player {
@@ -15,6 +16,8 @@ protected:
     bool test, is_discard;//是否送下家走，是否弃牌标志
     std::set<int> cards; //手牌
     CardSet discard_set ;//出牌集合
+    std::vector<CardSet> analyse; //分析后拆分的牌型集合
+    CardSet select_set; //选牌集合
 public:
     Player();
     void reset();
@@ -26,26 +29,17 @@ public:
         return cards.size();
     }
     void discard();
-
-
-
-};
-
-class AI_Player: public Player {
-private:
-    std::vector<*CardGroup> analyse; //分析后拆分的牌型集合
-    CardSet select_set; //选牌集合
-public:
     void analyseSelection();
+    void getBaseScore();
     void divideIntoGroups();
     void threePlusAndAirplane();
     void deleteUnknown();
     void selectCards();
-    void discard() override;
+    void robotDiscard();
     void discardAsFriend();
     void discardAsEnemy();
     void getSingle();
-    void getDouble;
+    void getDouble();
     void getSingleSeq();
     void getThreePlus();
     void getAirplane();
@@ -53,9 +47,7 @@ public:
     void pass();
     int valueToNum();
     void updateMap();
-    static bool cmp(CardSet *c1, CardSet *c2);
+    static bool cmp(CardSet c1, CardSet c2);
 
 };
 
-
-#endif
