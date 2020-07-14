@@ -4,7 +4,7 @@
 
 #include "card_set.h"
 
-CardSet::CardSet():type(Unknown), value(0), cnt(0) {};
+CardSet::CardSet():type(Void), value(0), cnt(0) {};
 
 CardSet::CardSet(Type t, int val):type(t), value(val), cnt(0) {};
 
@@ -31,7 +31,7 @@ void CardSet::remove(int num) {
 }
 void CardSet::reset() {
     cards.clear(), card_set.clear();
-    type = Unknown, value = cnt = 0;
+    type = Void, value = cnt = 0;
 }
 
 int CardSet::convert(int num) {
