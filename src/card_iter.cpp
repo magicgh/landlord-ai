@@ -2,7 +2,7 @@
  * @Author: Eric Feng
  * @Date: 2020-07-13 16:02:11
  * @LastEditTime: 2020-07-14 11:48:42
- * @LastEditors: Please set LastEditors
+ * @LastEditors: Eric Feng
  * @Description: In User Settings Edit
  * @FilePath: \landlord-ai\src\card_iter.cpp
  */ 
