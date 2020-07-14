@@ -4,7 +4,7 @@
 
 #pragma once
 
-const int HEIGHT = 1000;
-const int WIDTH = 500;
+const int HEIGHT = 600;
+const int WIDTH = 1000;
 const int FPS = 40;
 const int POKER_NUM = 54;
