@@ -2,8 +2,14 @@
 // Created by magicgh on 7/14/2020.
 //
 
+<<<<<<< HEAD
 #include "game.h"
 
+=======
+#include <game.h>
+
+const char* TITLE = "Landlord";
+>>>>>>> f15c3b2 (pressed)
 
 StartScene start_scene;
 GameScene game_scene;
@@ -24,10 +30,19 @@ void gameInit (){
 
 void gameMain() {
 
+<<<<<<< HEAD
 
     for(;is_run() ; delay_fps(FPS)) {
         cleardevice();
         current_scene->draw();
 
     }
+=======
+    for(;is_run() ; delay_fps(FPS)) {
+        cleardevice();
+        current_scene->draw();
+    }
+
+    closegraph();
+>>>>>>> f15c3b2 (pressed)
 }

@@ -5,8 +5,9 @@
  * @LastEditors: Please set LastEditors
  * @Description: 
  * @FilePath: \landlord-ai\include\components\text.h
- */ 
+ */
 
+<<<<<<< HEAD
 #ifndef COMPONENTS_TEXT_H
 #define COMPONENTS_TEXT_H
 
@@ -15,3 +16,6 @@ class _text{
 };
 
 #endif
+=======
+#pragma once
+>>>>>>> f15c3b2 (pressed)
