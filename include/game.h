@@ -7,12 +7,16 @@
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #include "constant.h"
 #include "scene.h"
 #include <graphics.h>
 =======
 #include "game.h"
 #include <graphics.h>
+=======
+#include "graphics.h"
+>>>>>>> 2db127b (feat: add player.cpp)
 #include "constant.h"
 #include "scene.h"
 <<<<<<< HEAD

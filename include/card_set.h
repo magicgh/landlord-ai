@@ -51,4 +51,15 @@ public:
         this->type = type;
     }
     // 0-53 转换为 3-17, A(14), B(15), 小王(16), 大王(17)
+
+    inline std::map<int,int> getCardSet(){
+        return this->card_set;
+    }
+
+    inline std::set<int> getCards(){
+        return this->cards;
+    }
+
+    bool operator ==(CardSet& obj);
+    bool operator !=(CardSet& obj);
 };
