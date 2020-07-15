@@ -1,4 +1,4 @@
-#include <game.h>
+#include "game.h"
 
 const char* TITLE = "Landlord";
 
@@ -20,9 +20,16 @@ int button()
 
 Game::Game() {
     current_scene = &start_scene;
-    landlord = current_player = last_player = -1;
+    landlord = current_player = last_player = nullptr;
+    for (int i = 0; i < 3; i++){
+        player[i] = new Player();
+    }
 }
 
+Game::~Game() {
+    for (int i = 0; i < 3; ++i)
+        delete player[i];
+}
 void Game::init(){
     initgraph(WIDTH,HEIGHT,0x0);
     setcaption(TITLE);
