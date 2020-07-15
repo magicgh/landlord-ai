@@ -46,8 +46,8 @@ bool Player::isValid(Player *last_player) {
             select_set.getCnt() != 4 && select_set.getCnt() != 2)//跟牌，但数量不符且不可能为炸弹
         return false;
 
-    select_set.getType() = Void;
-    AnalyseSelection();//分析所选牌的类型及权值
+    select_set.setType(Void);
+    // AnalyseSelection();//分析所选牌的类型及权值，没写完
 
     if (select_set.getType() == Void)//所选牌不符合规定
         return false;

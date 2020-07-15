@@ -35,11 +35,27 @@ private:
 
 public:
     Game();
+    ~Game();
     void main();
-    inline Player* nextPlayer(){
-        return (current_player+1)%3;
+    inline int nextPlayerIndex(){
+        for(int i = 0; i < 3; i++)
+            if(player[i] == current_player)
+                return (i+1)%3;
     }
-    inline bool isHuman(){
+    inline Player* nextPlayer(){
+        return player[nextPlayerIndex()];
+    }
+
+    inline int lastPlayerIndex(){
+        for(int i = 0; i < 3; i++)
+            if(player[i] == current_player)
+                return (i+2)%3;
+    }
+    inline Player* lastPlayer(){
+        return player[lastPlayerIndex()];
+    }
+
+    inline bool isHumanTurn(){
         return current_player == player[0];
     }
     void sendCard();

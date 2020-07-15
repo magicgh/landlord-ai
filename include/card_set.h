@@ -35,11 +35,20 @@ public:
     inline int getCnt(){
         return cnt;
     }
+    inline void setCnt(const int &cnt){
+        this->cnt = cnt;
+    }
     inline int getValue(){
         return value;
     }
+    inline void setValue(const int &value){
+        this->value = value;
+    }
     inline Type getType(){
         return type;
+    }
+    inline void setType(const Type &type){
+        this->type = type;
     }
     // 0-53 转换为 3-17, A(14), B(15), 小王(16), 大王(17)
 };
