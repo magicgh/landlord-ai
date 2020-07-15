@@ -71,7 +71,7 @@ public:
         return getDR().x;
     }
 
-    inline Vec getLen() {
+    inline const Vec getLen() {
         return this->length;
     }
 };
