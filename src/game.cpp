@@ -36,6 +36,17 @@ void Game::init(){
     setbkcolor(WHITE);
     setbkmode(TRANSPARENT);
     delay_ms(0);
+    card_heap_.reset();
+    card_heap_.shuffle();
+}
+
+void Game::sendCard() {
+    for(int i = 0; i < 17; ++i) {
+        player[0]->addCard(card_heap_.deal());
+        player[1]->addCard(card_heap_.deal());
+        player[2]->addCard(card_heap_.deal());
+    }
+    
 }
 
 void Game::main(){
@@ -64,10 +75,13 @@ void Game::main(){
         }
 
         if(current_scene == &game_scene){
+            if(game_scene.button() == 1) {
+                current_scene = &end_scene;
+                continue;
+            } 
 
-            if(current_scene->button()==0) current_scene = &game_scene;
-            else if(current_scene->button()==1) current_scene = &end_scene;
-            else break;
+            // game_scene.drawCards(player[0]->discard_set.getCards(), player[0]->select_set.getCards());
+            
         }
 
     }
