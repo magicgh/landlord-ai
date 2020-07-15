@@ -1,7 +1,7 @@
 /*
  * @Author: Eric Feng
  * @Date: 2020-07-13 16:19:53
- * @LastEditTime: 2020-07-14 22:17:02
+ * @LastEditTime: 2020-07-15 00:36:45
  * @LastEditors: Please set LastEditors
  * @Description: Text outer.
  * @FilePath: \landlord-ai\include\components\text.h
@@ -12,6 +12,7 @@
 #include <string>
 #include "graphics.h"
 
+class Rect;
 
 class Text {
 public:
