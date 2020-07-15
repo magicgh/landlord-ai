@@ -12,7 +12,7 @@ int button()
             if (x >= 650 && x <= 950) {
                 if(y >= 127 && y <= 222) return 0;
                 else if(y >= 257 && y <= 344) return 1;
-                else if(x >= 382 && x <= 470) return 2;
+                else if(y >= 382 && y <= 470) return 2;
             }
         }
     }
@@ -48,15 +48,29 @@ void Game::main(){
     Scene *current_scene=&start_scene;
 
     for(;is_run() ; delay_fps(FPS)) {
-        cleardevice();
+
         current_scene->draw();
 
         if(current_scene == &start_scene){
-            if(button()==0) current_scene = &game_scene;
-            else if(button()==1) current_scene = &explain_scene;
+            if(current_scene->button()==0){
+                current_scene->bgm_switch();
+                current_scene = &game_scene;
+            }
+            else if(current_scene->button()==1) {
+                current_scene->bgm_switch();
+                current_scene = &explain_scene;
+            }
             else break;
         }
+
+        if(current_scene == &game_scene){
+
+            if(current_scene->button()==0) current_scene = &game_scene;
+            else if(current_scene->button()==1) current_scene = &end_scene;
+            else break;
+        }
+
     }
-    getch();
+    //getch();
     closegraph();
 }
