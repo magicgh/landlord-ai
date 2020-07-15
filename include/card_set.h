@@ -32,5 +32,14 @@ public:
     void remove(int num);
     void reset();
     static int convert(int num);
+    inline int getCnt(){
+        return cnt;
+    }
+    inline int getValue(){
+        return value;
+    }
+    inline Type getType(){
+        return type;
+    }
     // 0-53 转换为 3-17, A(14), B(15), 小王(16), 大王(17)
 };
