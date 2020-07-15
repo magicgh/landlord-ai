@@ -37,3 +37,16 @@ void CardSet::reset() {
 int CardSet::convert(int num) {
     return num > 1 ? (num-1) % 13 + 2 : num + 16;
 }
+
+bool CardSet::operator ==(CardSet& obj){
+    if(this->getValue() == obj.getValue() && this->getType()==obj.getType() && this->getCnt()==obj.getCnt())
+        return true;
+    else
+        return false;
+}
+bool CardSet::operator !=(CardSet& obj){
+    if(this->getValue() == obj.getValue() && this->getType()==obj.getType() && this->getCnt()==obj.getCnt())
+        return false;
+    else
+        return true;   
+}

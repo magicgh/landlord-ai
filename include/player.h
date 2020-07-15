@@ -9,6 +9,10 @@
 
 #pragma once
 #include <vector>
+#include <algorithm>
+#include "stdexcept"
+#include <set>
+#include <map>
 #include "card_set.h"
 
 class Player {
@@ -25,28 +29,34 @@ public:
     inline void addCard(int num){
         cards.insert(num);
     }
+    //getRemain()
     inline int countCard(){
         return cards.size();
     }
-    void discard();
     void analyseSelection();
     int getBaseScore(int questioned, int current_score);
-    void divideIntoGroups();
+    void divideIntoGroups(); 
     void threePlusAndAirplane();
-    void deleteUnknown();
-    void selectCards();
-    void robotDiscard();
-    void discardAsFriend();
-    void discardAsEnemy();
-    void getSingle();
-    void getDouble();
-    void getSingleSeq();
-    void getThreePlus();
-    void getAirplane();
-    void discardAndClear();
+    void deleteUnknown(); //
+
+    void selectCards(bool hint, Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//AI选牌
+    void selfDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//直接出牌
+    void friendDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟友方牌
+    void enemyDiscard(bool hint,Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟敌方牌
+    bool robotDiscard(void);//AI出牌
+    bool humanDiscard(Player *last_player);//玩家出牌
+
+
+    void getSingle(Player *last_player);
+    void getDouble(Player *last_player);
+    void getSingleSeq(Player *last_player);
+    void getThreePlus(Player *last_player);
+    void getAirplane(Player *last_player);
+    bool discardAndClear();
     void pass();
-    int valueToNum();
-    void updateMap();
+    int valueToNum(std::set<int> cardscopy, int value); 
+    //freshMap
+    void updateMap(std::map<int, int> &m);
     static bool cmp(CardSet c1, CardSet c2);
 
 };
