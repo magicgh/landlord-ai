@@ -21,7 +21,7 @@ protected:
 public:
     Player();
     void reset();
-    bool isValid();
+    bool isValid(Player *last_player);
     inline void addCard(int num){
         cards.insert(num);
     }
@@ -30,7 +30,7 @@ public:
     }
     void discard();
     void analyseSelection();
-    void getBaseScore();
+    int getBaseScore(int questioned, int current_score);
     void divideIntoGroups();
     void threePlusAndAirplane();
     void deleteUnknown();
