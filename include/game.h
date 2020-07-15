@@ -19,9 +19,17 @@
 >>>>>>> f15c3b2 (pressed)
 =======
 #include "player.h"
+<<<<<<< HEAD
 >>>>>>> 09257bc (:sparkles: add game framework)
+=======
+#include "cards.h"
+>>>>>>> 38dbc88 (Game things)
 
 class Game{
+
+    friend Player;
+    friend Scene;
+
 private:
     StartScene start_scene;
     GameScene game_scene;
@@ -29,6 +37,7 @@ private:
     ExplainScene explain_scene;
     Scene *current_scene;
     Player *player[3], *landlord, *current_player, *last_player;
+    Cards card_heap_;
 
 private:
     void init();
