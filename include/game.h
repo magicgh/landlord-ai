@@ -42,13 +42,13 @@ public:
         return player[nextPlayerIndex()];
     }
 
-    inline int lastPlayerIndex(){
+    inline int prevPlayerIndex(){
         for(int i = 0; i < 3; i++)
             if(player[i] == current_player)
                 return (i+2)%3;
     }
-    inline Player* lastPlayer(){
-        return player[lastPlayerIndex()];
+    inline Player* prevPlayer(){
+        return player[prevPlayerIndex()];
     }
 
     inline bool isHumanTurn(){
