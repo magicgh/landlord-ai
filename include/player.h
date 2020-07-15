@@ -43,7 +43,7 @@ public:
     void selfDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//直接出牌
     void friendDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟友方牌
     void enemyDiscard(bool hint,Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟敌方牌
-    bool robotDiscard(void);//AI出牌
+    bool robotDiscard();//AI出牌
     bool humanDiscard(Player *last_player);//玩家出牌
 
 
