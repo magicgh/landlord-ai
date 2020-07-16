@@ -1,7 +1,7 @@
 /*
  * @Author: Billy Zhang
  * @Date: 2020-07-13 15:59:11
- * @LastEditTime: 2020-07-13 16:09:26
+ * @LastEditTime: 2020-07-15 23:50:56
  * @LastEditors: Please set LastEditors
  * @Description: 
  * @FilePath: \landlord-ai\include\player.h
@@ -16,6 +16,7 @@
 #include "card_set.h"
 
 class Player {
+    friend class Game;
 protected:
     bool test, is_discard;//是否送下家走，是否弃牌标志
     std::set<int> cards; //手牌

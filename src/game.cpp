@@ -46,7 +46,8 @@ void Game::sendCard() {
         player[1]->addCard(card_heap_.deal());
         player[2]->addCard(card_heap_.deal());
     }
-    
+    for(int i = 0; i < 3; ++i) 
+        landlord_cards[i] = card_heap_.deal();
 }
 
 void Game::main(){
@@ -66,6 +67,7 @@ void Game::main(){
             if(current_scene->button()==0){
                 current_scene->bgm_switch();
                 current_scene = &game_scene;
+                stage_ = START;
             }
             else if(current_scene->button()==1) {
                 current_scene->bgm_switch();
@@ -80,11 +82,40 @@ void Game::main(){
                 continue;
             } 
 
-            // game_scene.drawCards(player[0]->discard_set.getCards(), player[0]->select_set.getCards());
+            // 检测游戏阶段
+            switch (stage_)
+            {
+            case START:             // 发牌阶段
+                sendCard();
+                stage_ = GETLANDLORD;
+                break;
+            
+            case GETLANDLORD:
+
+                break;
+
+            case SENDLANDLORDCARDS:
+                break;
+
+            case DISCARD:
+                break;
+            
+            case GAMEOVER:
+                break;
+
+            default:
+                break;
+            }
+
+            game_scene.drawCards(player[0]->discard_set.getCards(), player[0]->select_set.getCards());
             
         }
 
     }
     //getch();
     closegraph();
+}
+
+void getLandlord() {
+
 }

@@ -12,10 +12,19 @@
 #include "player.h"
 #include "cards.h"
 
+//游戏进度状态
+enum Status{
+	START,              // 游戏开始
+	GETLANDLORD,        // 叫地主阶段
+	SENDLANDLORDCARDS,  // 发地主牌阶段
+	DISCARD,            // 出牌阶段
+	GAMEOVER            // 游戏结束
+};
+
 class Game{
 
-    friend Player;
-    friend Scene;
+    friend class Player;
+    friend class Scene;
 
 private:
     StartScene start_scene;
@@ -25,6 +34,8 @@ private:
     Scene *current_scene;
     Player *player[3], *landlord, *current_player, *last_player;
     Cards card_heap_;
+    int landlord_cards[3];
+    Status stage_;
 
 private:
     void init();
@@ -54,10 +65,12 @@ public:
     inline bool isHumanTurn(){
         return current_player == player[0];
     }
+
+    inline Status getStatus() {
+        return stage_;
+    }
+
     void sendCard();
     void getLandlord();
-
-
-
 
 };

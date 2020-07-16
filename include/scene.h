@@ -3,6 +3,7 @@
 #include<set>
 
 class Scene{
+    friend class Game;
 protected:
     PIMAGE img;
     MUSIC bgm;
