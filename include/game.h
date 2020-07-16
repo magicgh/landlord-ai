@@ -127,15 +127,21 @@ public:
         current_scene = s;
     }
     void sendCard();//发牌
-    void getLandlord(); //叫地主
+    void getLandlord(int result); //叫地主
     void sendLandlordCard(); //发地主牌
     void pass(); //过牌
     void gameOver(); //游戏结束
     void hint(); //出牌提示
+<<<<<<< HEAD
     void discard();
     void sendScore(int result); //设置真人玩家叫地主的分数
 
 
 >>>>>>> 388f1f5 (:sparkles: add some feature to game.h)
+=======
+    void discard(int type);
+    void discardClear();
+    void update();
+>>>>>>> 30695cc (:hammer: Basic functions realize)
 
 };

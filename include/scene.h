@@ -59,38 +59,35 @@ private:
             "static\\poker\\48.png","static\\poker\\49.png","static\\poker\\50.png","static\\poker\\51.png",
             "static\\poker\\52.png","static\\poker\\53.png","static\\poker\\54.png"
     };
-    std::set<int> hand,deal,select,player1,player2;
-    bool prepare;
+    std::set<int> hand,select,player[3];
+    bool status;
     int posx[3] = {0,0,880};
     int posy[3] = {470,0,0};
-    int pos_x[3] = {0,0,0};
-    int pos_y[3] = {100,0,0};
     int button_posx[6]={850,850,125,335,545,755};
     int button_posy[6]={470,550,400,400,400,400};
+    int order;
 public:
     GameScene() = default;
 
     void sethand(std::set<int> a);
 
-    void drawPlayer(int num);
+    void setselect(std::set<int> a);
+
+    void setdeal(std::set<int> a,std::set<int> b,std::set<int> c);
+
+    void drawPlayer();
+
+    void drawButton();
 
     void drawHand();
 
     void drawDeal();
 
-    void drawButton();
+    void Order(int a);
 
-    void shot();
+    void ready();
 
-    void pass();
-
-    void shuffle();
-
-    void choose(int num);
-
-    int size();
-
-    void work(int state);
+    void begin();
 
     void init() override;
 
