@@ -63,8 +63,12 @@ private:
     int landlord_cards[3];//地主专属牌
     int call_score[3];//各家叫地主的分数
     Status stage_;//游戏进度
+<<<<<<< HEAD
     int times,questioned, base_score, first_call;//倍率,询问叫地主次数,本局基本分, 第一个叫地主的玩家
 >>>>>>> 388f1f5 (:sparkles: add some feature to game.h)
+=======
+    int times, questioned, base_score, first_call;//倍率,询问叫地主次数,本局基本分, 第一个叫地主的玩家
+>>>>>>> 9dc6b60 (:sparkles: Implement Game::main)
 
 private:
     void init();
