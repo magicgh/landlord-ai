@@ -35,7 +35,7 @@ void CardSet::reset() {
 }
 
 int CardSet::convert(int num) {
-    return num > 1 ? (num-1) % 13 + 2 : num + 16;
+    return num > 51 ? num - 36 : 3 + num/4 ;
 }
 
 bool CardSet::operator ==(CardSet& obj){

@@ -5,6 +5,7 @@
 #include "player.h"
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 void Player::reset() {
     test = no_discard = 0;
@@ -49,7 +50,7 @@ bool Player::isValid(Player *last_player) {
         return false;
 
     select_set.setType(Void);
-     analyseSelection();//分析所选牌的类型及权值，没写完
+    analyseSelection();//分析所选牌的类型及权值，没写完
 
     if (select_set.getType() == Void)//所选牌不符合规定
         return false;
@@ -60,7 +61,7 @@ bool Player::isValid(Player *last_player) {
                     select_set.getValue() > last_player->discard_set.getValue()))
             return true;
         if (select_set.getType() != last_player->discard_set.getType() ||
-                select_set.getType() != last_player->discard_set.getCnt())//类型不符或数量不符
+                select_set.getCnt() != last_player->discard_set.getCnt())//类型不符或数量不符
             return false;
         if (select_set.getValue() <= last_player->discard_set.getValue())//选牌不大于上家牌
             return false;
@@ -702,7 +703,6 @@ void Player::friendDiscard(Player* last_player, Player* landlord, Player* prev_p
 		if (mem.getType() == last_player->discard_set.getType() &&
 			mem.getCnt() == last_player->discard_set.getCnt() &&
 			mem.getValue() > last_player->discard_set.getValue()){
-
 			select_set = mem;
 			break;
 		}
@@ -770,7 +770,7 @@ void Player::enemyDiscard(bool hint,Player* last_player, Player* landlord, Playe
 }
 
 //电脑出牌
-bool Player::robotDiscard()
+bool Player::robotDiscard(Player *last_player)
 {
 	if (select_set.getCnt() == 0){//电脑选牌区为空，说明不出
 		no_discard = true;
@@ -1040,24 +1040,60 @@ void Player::getAirplane(Player *last_player)
 bool Player::discardAndClear()
 {
 	discard_set = select_set;//把选牌放入出牌区：打出选牌
+	discards.clear();
 	bool need_clear = true;//本次出牌是否为拆牌，需要更新分析牌堆
-	for (auto b = analyse.begin(); b != analyse.end(); ++b){
+	for (auto b = analyse.begin(); b != analyse.end();){
 		if ((*b).getType() == select_set.getType() &&
 			(*b).getValue() == select_set.getValue() &&
 			(*b).getCnt() == select_set.getCnt()){//不是拆牌
-			analyse.erase(b);
+
+			// 删除手牌
+			int cnt = 0;
+			auto it = cards.begin();
+			while(it != cards.end() && cnt != (*b).getCnt()) {
+				if(CardSet::convert(*it) == (*b).getValue()) {
+					discards.insert(*it);
+					cnt++;
+					it = cards.erase(it);
+				}
+				else
+					++it;
+			}
+
+			b = analyse.erase(b);
             need_clear = false;//不需要清空
+
 			break;
 		}
+		else 
+			b++;
 	}
 	if (need_clear)//需要清空，下次出牌要重新分析
 		analyse.clear();
 
+
 	for (auto mem : select_set.getCards()){
 		cards.erase(mem);//从手牌中删除打出牌
 	}
+
+
 	select_set.reset();//清空选牌区
 	return true;
+}
+
+void Player::select(int rank)
+{
+    int i = 1;
+    for(auto it: cards){
+        if(i == rank)
+        {
+            if(select_set.getCards().find(it) != select_set.getCards().end()) select_set.remove(it);
+            else select_set.add(it);
+            break;
+        }
+        i++;
+    }
+
 }
 
 void Player::pass()
@@ -1117,4 +1153,6 @@ bool Player::cmp(CardSet c1, CardSet c2)
 		return c1.getValue() < c2.getValue();
 }
 
-
+std::set<int> Player::getDiscardCards() {
+	return discards;
+}
