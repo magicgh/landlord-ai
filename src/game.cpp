@@ -1,4 +1,6 @@
 #include "game.h"
+#include <random>
+#include <set>
 
 const char* TITLE = "Landlord";
 
@@ -144,11 +146,141 @@ void Game::main(){
                 current_scene = &end_scene;
                 current_scene->BgmPlay();
             }
+
+            switch (getStatus())
+            {
+            case START:
+                // 游戏开局初始化
+                questioned = 0;
+                times = 1;
+                base_score = 0;
+                landlord = current_player = last_player = nullptr;
+                for(int i = 0; i < 3; ++i)
+                    landlord_cards[i] = call_score[i] = 0;
+                
+                // 洗牌
+                card_heap_.reset();
+                card_heap_.shuffle();
+
+                sendCard(); // 发牌
+
+                stage_ = GETLANDLORD; // 进行叫地主阶段
+
+                // TODO: game_scene显示玩家手牌
+                break;
+
+            case GETLANDLORD:
+                getLandlord(); // 选取地主
+                if(isHumanTurn()) {
+                    int result;
+                    // TODO: game_scene获取玩家抢地主分数
+                    sendScore(result);
+                }
+
+                // TODO: game_scene显示玩家手牌
+                break;
+            
+            case SENDLANDLORDCARDS:
+                sendLandlordCard(); // 向地主发地主牌
+
+                break;
+
+            case DISCARD:
+                discard();
+
+                // TODO: game_scene显示玩家手牌
+                break;
+
+            case GAMEOVER:
+                gameOver(); // 输出Game over信息
+                current_scene = &end_scene; // 切换游戏终止场景
+                break;
+            
+            default:
+                exit(1);
+                break;
+            }
         }
     }
     closegraph();
 }
 
-void getLandlord() {
+// 叫地主询问
+void Game::getLandlord() {
+    int i = -1;
+	if (!questioned){
+        // 随机生成确定开始询问的玩家(使用均匀分布)
+		std::default_random_engine e((UINT)time(nullptr));
+		std::uniform_int_distribution<unsigned> u(0, 2);
 
+		first_call = i = u(e);
+	}
+	else if (questioned == 3){//所有玩家都已询问过
+		if (last_player){//给出分数最高的为地主
+			current_player = landlord = last_player;
+			last_player = nullptr;
+		}
+		else{//若均为叫牌，重新开始游戏
+			stage_ = START;
+		}
+		if (landlord)//地主已经确定，进入给地主发牌阶段
+			stage_ = SENDLANDLORDCARDS;
+		return;
+	}
+	if (i == -1)//不是第一次询问，确定要询问的下家
+		i = nextPlayerIndex();
+
+	if (i == 0){ //询问到真人玩家，返回等待玩家做出选择
+		current_player = player[0];
+		return;
+	}
+	else{//否则直接调用玩家的AI函数
+		current_player = player[i];
+		int result = current_player->getBaseScore(questioned, base_score);
+		call_score[i] = result;
+		if (result == 3){//给出三分就直接当地主
+			base_score = result;
+			landlord = current_player;
+			last_player = nullptr;
+		}
+		else if (result > base_score){//否则，给出分数大于上次给分玩家
+			base_score = result;
+			last_player = current_player;//就把该玩家记录下来
+		}
+		++questioned;
+	}
+	if (landlord)//地主已确定，进入发地主牌阶段
+		stage_ = SENDLANDLORDCARDS;
+}
+
+// 设置真人玩家叫地主的分数
+void Game::sendScore(int result) {
+    call_score[0] = result;
+	if (result == 3){
+		base_score = result;
+		landlord = player[0];
+		last_player = nullptr;
+	}
+	else if (result > base_score){
+		base_score = result;
+		last_player = player[0];
+	}
+	++questioned;
+	if (landlord)
+		stage_ = SENDLANDLORDCARDS;
+}
+
+void Game::sendLandlordCard() {
+    std::set<int> landlord_cards_set;
+
+    for(auto iter: landlord_cards) {
+        landlord->addCard(iter);
+        landlord_cards_set.insert(iter);
+    }
+
+    // TODO: 玩家和电脑牌传给game_scene
+    current_scene->draw();
+
+    // 进入出牌阶段
+    stage_ = DISCARD;
 }

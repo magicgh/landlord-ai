@@ -37,7 +37,7 @@ private:
     int landlord_cards[3];//地主专属牌
     int call_score[3];//各家叫地主的分数
     Status stage_;//游戏进度
-    int times,questioned, base_score, first_call;//倍率,询问叫地主次数,本局基本分, 第一个叫地主的玩家
+    int times, questioned, base_score, first_call;//倍率,询问叫地主次数,本局基本分, 第一个叫地主的玩家
 
 private:
     void init();
