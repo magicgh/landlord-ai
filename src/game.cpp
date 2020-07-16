@@ -64,7 +64,45 @@ void Game::sendCard() {
     }
     
 }
+//出牌
+void Game::discard() {
+    if(last_player == current_player){//该玩家出牌后没有人再出牌
+        last_player = nullptr;
+        for (int i=0; i<3; i++){//清空出牌区
+            player[i]->discard_set.reset();
+            player[i]->no_discard = false;
+        }
+    }
+    else{//清空 current_player 出牌区
+        current_player->discard_set.reset();
+        current_player->no_discard = false;
+    }
+    // Scene.ShowScene
+    if(current_player == player[0]){//当前玩家为人
+        if(current_player ->select_set.getCnt() && current_player->humanDiscard(last_player)) {//玩家已选牌并且符合规定
+            //Scene Hide Discard Button
+            last_player = current_player;
+            if (current_player->discard_set.getType() == Bomb) //炸弹加倍
+                times++;
+        }
+        else{//否则继续等待玩家选牌
+            //Scene.ShowScene
+            //Scene.Show Discard Button
+        }
+    }
+    else{
+        current_player->selectCards(last_player, landlord, prevPlayer(), nextPlayer());
+        if(current_player->humanDiscard(last_player))
+            last_player = current_player;
+        if(current_player->discard_set.getType() == Bomb)
+            times++;
+    }
+    //Scene.ShowScene
+    if(last_player->cards.empty());
+        //status = GAMEOVER;
+    else current_player = nextPlayer();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 <<<<<<< HEAD
@@ -83,14 +121,12 @@ void Game::main(){
     init();
 >>>>>>> 09257bc (:sparkles: add game framework)
 =======
+=======
+}
+>>>>>>> b3cf641 (:hammer: rewrite game.cpp)
 void Game::main(){
     init();
-    StartScene start_scene;
-    GameScene game_scene;
-    EndScene end_scene;
-    ExplainScene explain_scene;
 
-    Scene *current_scene=&start_scene;
 
 >>>>>>> 1914137 (fix: rebuild the scene)
     for(;is_run() ; delay_fps(FPS)) {
@@ -116,6 +152,7 @@ void Game::main(){
             } 
 
             // game_scene.drawCards(player[0]->discard_set.getCards(), player[0]->select_set.getCards());
+
             
         }
 

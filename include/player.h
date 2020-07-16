@@ -16,8 +16,9 @@
 #include "card_set.h"
 
 class Player {
+    friend class Game;
 protected:
-    bool test, is_discard;//是否送下家走，是否弃牌标志
+    bool test, no_discard;//是否送下家走，是否弃牌标志，is_discard改为no_discard
     std::set<int> cards; //手牌
     CardSet discard_set ;//出牌集合
     std::vector<CardSet> analyse; //分析后拆分的牌型集合
@@ -39,25 +40,25 @@ public:
     void threePlusAndAirplane();
     void deleteUnknown(); //
 
-    void selectCards(bool hint, Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//AI选牌
-    void selfDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//直接出牌
-    void friendDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟友方牌
-    void enemyDiscard(bool hint,Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟敌方牌
-    bool robotDiscard();//AI出牌
-    bool humanDiscard(Player *last_player);//玩家出牌
+    void selectCards(Player* last_player, Player* landlord, Player* prev_player, Player* next_player, bool hint = false);//AI选牌
+    void selfDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//直接出牌 myself
+    void friendDiscard(Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟友方牌 friend
+    void enemyDiscard(bool hint,Player* last_player, Player* landlord, Player* prev_player, Player* next_player);//跟敌方牌 enemy
+    bool robotDiscard();//AI出牌,Discard
+    bool humanDiscard(Player *last_player);//玩家出牌 human discard
 
 
-    void getSingle(Player *last_player);
-    void getDouble(Player *last_player);
-    void getSingleSeq(Player *last_player);
-    void getThreePlus(Player *last_player);
-    void getAirplane(Player *last_player);
+    void getSingle(Player *last_player);//need single
+    void getDouble(Player *last_player);//need double
+    void getSingleSeq(Player *last_player);//need single seq
+    void getThreePlus(Player *last_player);//need three plus
+    void getAirplane(Player *last_player);//need airplane
     bool discardAndClear();
     void pass();
     int valueToNum(std::set<int> cardscopy, int value); 
     //freshMap
-    void updateMap(std::map<int, int> &m);
-    static bool cmp(CardSet c1, CardSet c2);
+    void updateMap(std::map<int, int> &m);//freshenmap
+    static bool cmp(CardSet c1, CardSet c2); //my compare
 
 };
 

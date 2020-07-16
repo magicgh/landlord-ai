@@ -7,10 +7,10 @@
 #include <algorithm>
 
 void Player::reset() {
-    test = is_discard = 0;
+    test = no_discard = 0;
     cards.clear(), analyse.clear(), select_set.reset(), discard_set.reset();
 }
-Player::Player(): test(0), is_discard(0){};
+Player::Player(): test(0), no_discard(0){};
 
 int Player::getBaseScore(int questioned, int current_score) {
     if (questioned == 2 && current_score == 0)//如果前两位都未叫牌，直接3分当地主，你懂得~
@@ -598,8 +598,7 @@ void Player::deleteUnknown()
 
 
 //电脑选牌
-void Player::selectCards(bool hint, Player* last_player, Player* landlord, Player* prev_player, Player* next_player)
-{
+void Player::selectCards(Player *last_player, Player *landlord, Player *prev_player, Player *next_player, bool hint) {
 	if (analyse.empty())//是否需要重新分析手牌
 		divideIntoGroups();
 	threePlusAndAirplane();
@@ -773,7 +772,7 @@ void Player::enemyDiscard(bool hint,Player* last_player, Player* landlord, Playe
 bool Player::robotDiscard()
 {
 	if (select_set.getCnt() == 0){//电脑选牌区为空，说明不出
-		is_discard = true;
+		no_discard = true;
 		return false;
 	}
 	//否则正常打出
@@ -1062,30 +1061,30 @@ bool Player::discardAndClear()
 
 void Player::pass()
 {
-	is_discard = true;
+	no_discard = true;
 	select_set.reset();
 	return;
 }
 
 
 
-int Player::valueToNum(std::set<int> cardscopy, int value)
+int Player::valueToNum(std::set<int> cards_copy, int value)
 {
-	if (value<3 || value>17 || cardscopy.empty())
+	if (value<3 || value>17 || cards_copy.empty())
 		throw std::runtime_error("Value not in set!");
 
-	if (value == 16 && cardscopy.find(52) != cardscopy.end()){
-		cardscopy.erase(52);
+	if (value == 16 && cards_copy.find(52) != cards_copy.end()){
+        cards_copy.erase(52);
 		return 52;
 	}
-	else if (value == 17 && cardscopy.find(53) != cardscopy.end()){
-		cardscopy.erase(53);
+	else if (value == 17 && cards_copy.find(53) != cards_copy.end()){
+        cards_copy.erase(53);
 		return 53;
 	}
 	else{
 		for (int i = (value - 3) * 4, j = 0; j < 4; ++j){
-			if (cardscopy.find(i + j) != cardscopy.end()){
-				cardscopy.erase(i + j);
+			if (cards_copy.find(i + j) != cards_copy.end()){
+                cards_copy.erase(i + j);
 				return i + j;
 			}
 
@@ -1117,3 +1116,5 @@ bool Player::cmp(CardSet c1, CardSet c2)
 	else
 		return c1.getValue() < c2.getValue();
 }
+
+
