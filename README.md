@@ -22,6 +22,3 @@ Just click it to run the game. If you need more help for playing this game, clic
 *  [liyuxuanzzz](https://github.com/liyuxuanzzz)
 *  [CaoJZ-01](https://github.com/CaoJZ-01)
 *  [Fobow](https://github.com/Fobow)
-## LICENSE
-GPL LICENSE
-
