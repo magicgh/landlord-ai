@@ -14,8 +14,8 @@
 
 class Game{
 
-    friend Player;
-    friend Scene;
+    friend class Player;
+    friend class Scene;
 
 private:
     StartScene start_scene;
@@ -25,6 +25,7 @@ private:
     Scene *current_scene;
     Player *player[3], *landlord, *current_player, *last_player;
     Cards card_heap_;
+    int times,questioned;//倍率,叫地主次数
 
 private:
     void init();
@@ -37,6 +38,7 @@ public:
         for(int i = 0; i < 3; i++)
             if(player[i] == current_player)
                 return (i+1)%3;
+        return -1;
     }
     inline Player* nextPlayer(){
         return player[nextPlayerIndex()];
@@ -46,6 +48,7 @@ public:
         for(int i = 0; i < 3; i++)
             if(player[i] == current_player)
                 return (i+2)%3;
+        return -1;
     }
     inline Player* prevPlayer(){
         return player[prevPlayerIndex()];
@@ -57,7 +60,7 @@ public:
     void sendCard();
     void getLandlord();
 
-
+    void discard();
 
 
 };
