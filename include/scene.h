@@ -3,16 +3,18 @@
 #include<set>
 
 class Scene{
+    friend class Game;
 protected:
     PIMAGE img;
     MUSIC bgm;
-    bool on;
 public:
     Scene() = default;
     ~Scene() = default;
+    void BgmPlay();
+    void BgmPause();
+    virtual void init()=0;
     virtual void draw()=0;
     virtual int button()=0;
-    void bgm_switch();
 };
 
 class StartScene : public Scene {
@@ -22,6 +24,8 @@ private:
 public:
     StartScene() = default;
 
+    void init() override;
+
     void draw() override;
 
     int button() override;
@@ -30,8 +34,15 @@ public:
 class GameScene : public Scene {
 private:
     const char *img_file_path = "static\\game_scene.png";
-    const char *bgm_path = "static\\bgm2.mp3";
-    PIMAGE poke_img[55];
+    const char *bgm_path = "static\\bgm3.mp3";
+    PIMAGE poke_img[55],player_img[3][2],button_img[6];
+    const char *player_file[3][2] = {
+            {"static\\landlord.png","static\\landlord_reverse.png"},
+            {"static\\farmer1.png","static\\farmer1_reverse.png"},
+            {"static\\farmer2.png","static\\farmer2_reverse.png"}
+    };
+    const char *button_file[6] = {"static\\shot.png","static\\pass.png","static\\score_0.png",
+                                  "static\\score_1.png","static\\score_2.png","static\\score_3.png"};
     const char *poke_file[55] = {
             "static\\poker\\0.png","static\\poker\\1.png","static\\poker\\2.png","static\\poker\\3.png",
             "static\\poker\\4.png","static\\poker\\5.png","static\\poker\\6.png","static\\poker\\7.png",
@@ -48,10 +59,40 @@ private:
             "static\\poker\\48.png","static\\poker\\49.png","static\\poker\\50.png","static\\poker\\51.png",
             "static\\poker\\52.png","static\\poker\\53.png","static\\poker\\54.png"
     };
+    std::set<int> hand,deal,select,player1,player2;
+    bool prepare;
+    int posx[3] = {0,0,880};
+    int posy[3] = {470,0,0};
+    int pos_x[3] = {0,0,0};
+    int pos_y[3] = {100,0,0};
+    int button_posx[6]={850,850,125,335,545,755};
+    int button_posy[6]={470,550,400,400,400,400};
 public:
     GameScene() = default;
 
-    void drawCards(std::set<int> hand,std::set<int> select);
+    void sethand(std::set<int> a);
+
+    void drawPlayer(int num);
+
+    void drawHand();
+
+    void drawDeal();
+
+    void drawButton();
+
+    void shot();
+
+    void pass();
+
+    void shuffle();
+
+    void choose(int num);
+
+    int size();
+
+    void work(int state);
+
+    void init() override;
 
     void draw() override;
 
@@ -60,22 +101,35 @@ public:
 
 class EndScene : public Scene {
 private:
-    const char *img_file_path = "static\\lose.png";
+    PIMAGE win_img,lose_img,img1;
+    MUSIC win_bgm,lose_bgm;
+
+    const char *img_file_path = "static\\new_game.png";
+    const char *win_file_path = "static\\win.png";
+    const char *lose_file_path = "static\\lose.png";
+
+    const char *win_bgm_path = "static\\end_win.mp3";
+    const char *lose_bgm_path = "static\\end_lose.mp3";
 public:
     EndScene() = default;
 
+    void init() override;
+
     void draw() override;
 
-    void restart();
-
     int button() override;
+
+    void SetType(bool type);
 };
 
 class ExplainScene : public Scene {
 private:
     const char *img_file_path = "static\\rule.png";
+    const char *bgm_path = "static\\bgm2.mp3";
 public:
     ExplainScene() = default;
+
+    void init() override;
 
     void draw() override;
 
