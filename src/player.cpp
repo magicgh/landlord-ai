@@ -10,7 +10,7 @@ void Player::reset() {
     test = no_discard = 0;
     cards.clear(), analyse.clear(), select_set.reset(), discard_set.reset();
 }
-Player::Player(): test(0), no_discard(0){};
+Player::Player(): test(0), no_discard(0), score(1000){};
 
 int Player::getBaseScore(int questioned, int current_score) {
     if (questioned == 2 && current_score == 0)//如果前两位都未叫牌，直接3分当地主，你懂得~
