@@ -29,6 +29,15 @@
 #include "cards.h"
 >>>>>>> 38dbc88 (Game things)
 
+//游戏进度状态
+enum Status{
+	START,              // 游戏开始
+	GETLANDLORD,        // 叫地主阶段
+	SENDLANDLORDCARDS,  // 发地主牌阶段
+	DISCARD,            // 出牌阶段
+	GAMEOVER            // 游戏结束
+};
+
 class Game{
 
     friend class Player;
@@ -42,7 +51,12 @@ private:
     Scene *current_scene;
     Player *player[3], *landlord, *current_player, *last_player;
     Cards card_heap_;
+<<<<<<< HEAD
     int times,questioned;//倍率,叫地主次数
+=======
+    int landlord_cards[3];
+    Status stage_;
+>>>>>>> fdddaab (Game stage)
 
 private:
     void init();
@@ -74,10 +88,19 @@ public:
     inline bool isHumanTurn(){
         return current_player == player[0];
     }
+<<<<<<< HEAD
     void sendCard();
     void getLandlord();
 
     void discard();
+=======
 
+    inline Status getStatus() {
+        return stage_;
+    }
+>>>>>>> fdddaab (Game stage)
+
+    void sendCard();
+    void getLandlord();
 
 };
