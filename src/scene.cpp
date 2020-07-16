@@ -113,6 +113,9 @@ void GameScene::init() {
         getimage(button_img[i], button_file[i]);
     }
 
+    setcolor(BLACK);
+    setfont(100, 0, "Comic Sans MS");
+
     status = 1;
 
     bgm.OpenFile(bgm_path);
@@ -124,9 +127,14 @@ void GameScene::draw(){
     drawButton();
     drawDeal();
     drawHand();
+    drawTxt();
     drawPlayer();
 }
 
+void GameScene::drawTxt() {
+    xyprintf(157 , 10, "%d", size1);
+    xyprintf(767 , 10, "%d", size2);
+}
 
 void GameScene::drawPlayer() {
     if(!status)
@@ -182,6 +190,12 @@ void GameScene::setdeal(std::set<int> a, std::set<int> b, std::set<int> c) {
     player[0] = a;
     player[1] = b;
     player[2] = c;
+}
+
+void GameScene::setnum(int a,int b)
+{
+    size1 = a;
+    size2 = b;
 }
 
 void GameScene::sethand(std::set<int> a){

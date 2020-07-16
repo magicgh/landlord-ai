@@ -65,7 +65,7 @@ private:
     int posy[3] = {470,0,0};
     int button_posx[6]={850,850,125,335,545,755};
     int button_posy[6]={470,550,400,400,400,400};
-    int order;
+    int order,size1,size2;
 public:
     GameScene() = default;
 
@@ -75,9 +75,13 @@ public:
 
     void setdeal(std::set<int> a,std::set<int> b,std::set<int> c);
 
+    void setnum(int a,int b);
+
     void drawPlayer();
 
     void drawButton();
+
+    void drawTxt();
 
     void drawHand();
 
