@@ -128,31 +128,50 @@ void Game::main(){
 void Game::main(){
     init();
 
+<<<<<<< HEAD
+=======
+    start_scene.init();
+    game_scene.init();
+    end_scene.init();
+    explain_scene.init();
+
+    Scene *current_scene=&start_scene;
+    current_scene->BgmPlay();
+>>>>>>> bbd0b3a (:bug add new scene)
 
 >>>>>>> 1914137 (fix: rebuild the scene)
     for(;is_run() ; delay_fps(FPS)) {
 
         current_scene->draw();
 
+        int state = current_scene->button();
+
         if(current_scene == &start_scene){
-            if(current_scene->button()==0){
-                current_scene->bgm_switch();
+            if(state==0){
+                current_scene->BgmPause();
                 current_scene = &game_scene;
+<<<<<<< HEAD
                 stage_ = START;
+=======
+                game_scene.shuffle();
+                current_scene->BgmPlay();
+>>>>>>> bbd0b3a (:bug add new scene)
             }
-            else if(current_scene->button()==1) {
-                current_scene->bgm_switch();
+            else if(state==1) {
+                current_scene->BgmPause();
                 current_scene = &explain_scene;
+                current_scene->BgmPlay();
             }
             else break;
         }
 
-        if(current_scene == &game_scene){
-            if(game_scene.button() == 1) {
-                current_scene = &end_scene;
-                continue;
-            } 
+        else if(current_scene == &explain_scene && state){
+            current_scene->BgmPause();
+            current_scene = &start_scene;
+            current_scene->BgmPlay();
+        }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
             // game_scene.drawCards(player[0]->discard_set.getCards(), player[0]->select_set.getCards());
 
@@ -185,10 +204,27 @@ void Game::main(){
             game_scene.drawCards(player[0]->discard_set.getCards(), player[0]->select_set.getCards());
 >>>>>>> fdddaab (Game stage)
             
+=======
+        else if(current_scene == &end_scene && state){
+            current_scene->BgmPause();
+            current_scene = &game_scene;
+            game_scene.shuffle();
+            current_scene->BgmPlay();
+>>>>>>> bbd0b3a (:bug add new scene)
         }
 
+        else if(current_scene == &game_scene){
+            game_scene.work(state);
+
+            if(game_scene.size()==0){
+                end_scene.SetType(0);
+                current_scene->draw();
+                current_scene->BgmPause();
+                current_scene = &end_scene;
+                current_scene->BgmPlay();
+            }
+        }
     }
-    //getch();
     closegraph();
 <<<<<<< HEAD
 >>>>>>> f15c3b2 (pressed)
