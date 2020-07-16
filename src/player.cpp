@@ -211,7 +211,7 @@ void Player::analyseSelection()
 
 
 //拆分手牌牌型并组成基本牌集合
-void Player::divideIntoGroups(void)
+void Player::divideIntoGroups()
 {
 	if (analyse.size())//牌型集合非空，返回
 		return;
@@ -583,7 +583,7 @@ void Player::threePlusAndAirplane()
 }
 
 
-void Player::deleteUnknown(void)
+void Player::deleteUnknown()
 {
 	auto b = analyse.begin();
 	while (b != analyse.end()){
@@ -770,7 +770,7 @@ void Player::enemyDiscard(bool hint,Player* last_player, Player* landlord, Playe
 }
 
 //电脑出牌
-bool Player::robotDiscard(void)
+bool Player::robotDiscard()
 {
 	if (select_set.getCnt() == 0){//电脑选牌区为空，说明不出
 		is_discard = true;
@@ -1060,7 +1060,7 @@ bool Player::discardAndClear()
 	return true;
 }
 
-void Player::pass(void)
+void Player::pass()
 {
 	is_discard = true;
 	select_set.reset();

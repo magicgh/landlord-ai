@@ -57,62 +57,61 @@ void Game::main(){
     EndScene end_scene;
     ExplainScene explain_scene;
 
+    start_scene.init();
+    game_scene.init();
+    end_scene.init();
+    explain_scene.init();
+
     Scene *current_scene=&start_scene;
+    current_scene->BgmPlay();
 
     for(;is_run() ; delay_fps(FPS)) {
 
         current_scene->draw();
 
+        int state = current_scene->button();
+
         if(current_scene == &start_scene){
-            if(current_scene->button()==0){
-                current_scene->bgm_switch();
+            if(state==0){
+                current_scene->BgmPause();
                 current_scene = &game_scene;
                 stage_ = START;
+                game_scene.shuffle();
+                current_scene->BgmPlay();
             }
-            else if(current_scene->button()==1) {
-                current_scene->bgm_switch();
+            else if(state==1) {
+                current_scene->BgmPause();
                 current_scene = &explain_scene;
+                current_scene->BgmPlay();
             }
             else break;
         }
 
-        if(current_scene == &game_scene){
-            if(game_scene.button() == 1) {
-                current_scene = &end_scene;
-                continue;
-            } 
-
-            // 检测游戏阶段
-            switch (stage_)
-            {
-            case START:             // 发牌阶段
-                sendCard();
-                stage_ = GETLANDLORD;
-                break;
-            
-            case GETLANDLORD:
-
-                break;
-
-            case SENDLANDLORDCARDS:
-                break;
-
-            case DISCARD:
-                break;
-            
-            case GAMEOVER:
-                break;
-
-            default:
-                break;
-            }
-
-            game_scene.drawCards(player[0]->discard_set.getCards(), player[0]->select_set.getCards());
-            
+        else if(current_scene == &explain_scene && state){
+            current_scene->BgmPause();
+            current_scene = &start_scene;
+            current_scene->BgmPlay();
         }
 
+        else if(current_scene == &end_scene && state){
+            current_scene->BgmPause();
+            current_scene = &game_scene;
+            game_scene.shuffle();
+            current_scene->BgmPlay();
+        }
+
+        else if(current_scene == &game_scene){
+            game_scene.work(state);
+
+            if(game_scene.size()==0){
+                end_scene.SetType(0);
+                current_scene->draw();
+                current_scene->BgmPause();
+                current_scene = &end_scene;
+                current_scene->BgmPlay();
+            }
+        }
     }
-    //getch();
     closegraph();
 }
 
