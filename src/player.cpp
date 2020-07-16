@@ -10,7 +10,7 @@ void Player::reset() {
     test = no_discard = 0;
     cards.clear(), analyse.clear(), select_set.reset(), discard_set.reset();
 }
-Player::Player(): test(0), no_discard(0){};
+Player::Player(): test(0), no_discard(0), score(1000){};
 
 int Player::getBaseScore(int questioned, int current_score) {
     if (questioned == 2 && current_score == 0)//如果前两位都未叫牌，直接3分当地主，你懂得~
@@ -18,7 +18,7 @@ int Player::getBaseScore(int questioned, int current_score) {
     int sum = 0;
     std::map<int, int> need_analyse;//方便分析的权值-数量集合
     for (auto mem : cards)
-        ++need_analyse[CardSet::convert(mem)];//根据手牌构造待分析集合
+        need_analyse[CardSet::convert(mem)]++;//根据手牌构造待分析集合
 
     if (need_analyse.find(16) != need_analyse.end() &&
             need_analyse.find(17) != need_analyse.end())//存在王炸
@@ -43,13 +43,13 @@ int Player::getBaseScore(int questioned, int current_score) {
     return (result > current_score ? result : 0);
 }
 bool Player::isValid(Player *last_player) {
-    //game last_player 接口待写
+
     if (last_player && last_player->discard_set.getCnt() != select_set.getCnt() &&
             select_set.getCnt() != 4 && select_set.getCnt() != 2)//跟牌，但数量不符且不可能为炸弹
         return false;
 
     select_set.setType(Void);
-    // AnalyseSelection();//分析所选牌的类型及权值，没写完
+     analyseSelection();//分析所选牌的类型及权值，没写完
 
     if (select_set.getType() == Void)//所选牌不符合规定
         return false;
@@ -213,42 +213,42 @@ void Player::analyseSelection()
 //拆分手牌牌型并组成基本牌集合
 void Player::divideIntoGroups()
 {
-	if (analyse.size())//牌型集合非空，返回
+	if (!analyse.empty())//牌型集合非空，返回
 		return;
 
-	std::set<int> cardscopy(cards);//手牌副本
-	std::map<int, int> needanalyse;//方便分析的权值-数量集合
+	std::set<int> cards_copy(cards);//手牌副本
+	std::map<int, int> need_analyse;//方便分析的权值-数量集合
 
-	for (auto mem : cardscopy)
-		++needanalyse[CardSet::convert(mem)];//根据手牌构造待分析集合
+	for (auto mem : cards_copy)
+		++need_analyse[CardSet::convert(mem)];//根据手牌构造待分析集合
 
-	if (needanalyse.find(16) != needanalyse.end() &&
-		needanalyse.find(17) != needanalyse.end()){//满足条件存在王炸
+	if (need_analyse.find(16) != need_analyse.end() &&
+            need_analyse.find(17) != need_analyse.end()){//满足条件存在王炸
 		CardSet c = CardSet(Bomb, 17);
 		for (int i = 16; i < 18; ++i){
-			c.add(valueToNum(cardscopy, i));
-			needanalyse.erase(i);
+			c.add(valueToNum(cards_copy, i));
+            need_analyse.erase(i);
 		}
 		analyse.push_back(c);
 	}
 
-	for (auto mem : needanalyse){
+	for (auto mem : need_analyse){
 		if (mem.second == 4){	//炸弹
 			CardSet c = CardSet(Bomb, mem.first);
 			for (int i = 0; i < 4; ++i){
-				c.add(valueToNum(cardscopy, mem.first));
+				c.add(valueToNum(cards_copy, mem.first));
 			}
 			analyse.push_back(c);
-			needanalyse[mem.first] = 0;
+			need_analyse[mem.first] = 0;
 		}
 	}
 	//删除分析堆中数量为零的元素
-	updateMap(needanalyse);
+	updateMap(need_analyse);
 
 	//提前处理2
-	if (needanalyse.find(15) != needanalyse.end()){
+	if (need_analyse.find(15) != need_analyse.end()){
 		CardSet c = CardSet(Void, 15);
-		int n = needanalyse[15];
+		int n = need_analyse[15];
 		switch (n){
 		case 3:
 			c.setType(Three);
@@ -261,16 +261,16 @@ void Player::divideIntoGroups()
 			break;
 		}
 		for (int i = 0; i < n; ++i)
-			c.add(valueToNum(cardscopy, 15));
-		needanalyse.erase(15);
+			c.add(valueToNum(cards_copy, 15));
+        need_analyse.erase(15);
 		analyse.push_back(c);
 	}
 	//查找单顺
 	int begin, n;
 	bool exist = true;
-	while (exist && needanalyse.size()){
+	while (exist && need_analyse.size()){
 		begin = n = 0;
-		for (auto b = needanalyse.begin(); b != needanalyse.end(); ++b){
+		for (auto b = need_analyse.begin(); b != need_analyse.end(); ++b){
 			if (b->second > 0){//跳过为零的元素
 				if (!begin)
 					begin = b->first;
@@ -283,15 +283,15 @@ void Player::divideIntoGroups()
 				int first = p->first - 4;//单顺的第一个
 				CardSet c = CardSet(SingleSeq, p->first);
 				for (first; first <= p->first; ++first){
-					c.add(valueToNum(cardscopy, first));
-					--needanalyse[first];//减一
+					c.add(valueToNum(cards_copy, first));
+					--need_analyse[first];//减一
 				}
 				analyse.push_back(c);
 				exist = true;
 				break;//从开始重新查找
 			}
 			//连续牌面数量小于五个，重新计数；或者已到集合最后数量仍不满足
-			auto end = needanalyse.end();
+			auto end = need_analyse.end();
 			if (begin - 1 != b->first || b == --end){
 				if (b->second > 0){
 					begin = b->first;
@@ -307,22 +307,22 @@ void Player::divideIntoGroups()
 	}
 
 	//删除分析堆中数量为零的元素
-	updateMap(needanalyse);
+	updateMap(need_analyse);
 	//如可能，继续往单顺中添加剩余牌
 	for (auto mem : analyse){
 		if (mem.getType() == SingleSeq){//针对每个单顺
-			for (auto m : needanalyse){
+			for (auto m : need_analyse){
 				if (m.second > 0 && m.first == mem.getValue() + 1){//剩余牌中还有比单顺最大大一的牌
-					mem.add(valueToNum(cardscopy, m.first));
+					mem.add(valueToNum(cards_copy, m.first));
 					mem.setValue(mem.getValue()+1);
-					--needanalyse[m.first];
+					--need_analyse[m.first];
 
 				}
 			}
 		}
 	}
 	//删除分析堆中数量为零的元素
-	updateMap(needanalyse);
+	updateMap(need_analyse);
 
 	//如现有单顺中有可以对接成更长的单顺；或两个单顺元素相同，组合成双顺
 	for (auto mem1 : analyse){
@@ -357,7 +357,7 @@ void Player::divideIntoGroups()
 			}
 		}
 	}
-	if (needanalyse.empty()){//分析集合已空，返回
+	if (need_analyse.empty()){//分析集合已空，返回
 		deleteUnknown();
 		sort(analyse.begin(), analyse.end(), cmp);
 		return;
@@ -365,8 +365,8 @@ void Player::divideIntoGroups()
 
 	//双顺，只查找数量大于等于2的连续牌，并且3个以上相连
 	begin = n = 0;
-	auto last = --needanalyse.end();
-	for (auto b = needanalyse.begin(); b != needanalyse.end(); ++b){
+	auto last = --need_analyse.end();
+	for (auto b = need_analyse.begin(); b != need_analyse.end(); ++b){
 		if (b->second >= 2){
 			if (!begin)
 				begin = b->first;
@@ -382,7 +382,7 @@ void Player::divideIntoGroups()
 				CardSet c = CardSet(DoubleSeq, p->first);
 				for (int i = n; i > 0; --i, --p){
 					for (int j = 0; j < 2; ++j){
-						c.add(valueToNum(cardscopy, p->first));
+						c.add(valueToNum(cards_copy, p->first));
 						--p->second;
 					}
 				}
@@ -401,7 +401,7 @@ void Player::divideIntoGroups()
 	}
 
 	//删除分析堆中数量为零的元素
-	updateMap(needanalyse);
+	updateMap(need_analyse);
 
 	//三顺
 	//查找是否有重合的单顺和双顺组合成三顺
@@ -420,15 +420,15 @@ void Player::divideIntoGroups()
 		}
 	}
 
-	if (needanalyse.empty()){
+	if (need_analyse.empty()){
 		deleteUnknown();
 		sort(analyse.begin(), analyse.end(), cmp);
 		return;
 	}
 	//剩余牌中查找三顺
 	begin = n = 0;
-	last = --needanalyse.end();
-	for (auto b = needanalyse.begin(); b != needanalyse.end(); ++b){
+	last = --need_analyse.end();
+	for (auto b = need_analyse.begin(); b != need_analyse.end(); ++b){
 		if (b->second == 3){
 			if (!begin)
 				begin = b->first;
@@ -444,7 +444,7 @@ void Player::divideIntoGroups()
 				CardSet c = CardSet(ThreeSeq, p->first);
 				for (int i = n; i > 0; --i, --p){
 					for (int j = 0; j < 3; ++j){
-						c.add(valueToNum(cardscopy, p->first));
+						c.add(valueToNum(cards_copy, p->first));
 						--p->second;
 					}
 				}
@@ -462,40 +462,40 @@ void Player::divideIntoGroups()
 		}
 	}
 	//三条
-	for (auto mem : needanalyse){
+	for (auto mem : need_analyse){
 		if (mem.second == 3){
 			CardSet c = CardSet(Three, mem.first);
 			for (int i = 0; i < 3; ++i)
-				c.add(valueToNum(cardscopy, mem.first));
-			needanalyse[mem.first] = 0;
+				c.add(valueToNum(cards_copy, mem.first));
+            need_analyse[mem.first] = 0;
 			analyse.push_back(c);
 		}
 	}
 
 	//对子
-	for (auto mem : needanalyse){
+	for (auto mem : need_analyse){
 		if (mem.second == 2){
 			CardSet c = CardSet(Double, mem.first);
 			for (int i = 0; i < 2; ++i)
-				c.add(valueToNum(cardscopy, mem.first));
-			needanalyse[mem.first] = 0;
+				c.add(valueToNum(cards_copy, mem.first));
+            need_analyse[mem.first] = 0;
 			analyse.push_back(c);
 		}
 	}
 	//删除分析堆中数量为零的元素
-	updateMap(needanalyse);
+	updateMap(need_analyse);
 
 	//单牌
-	for (auto mem : needanalyse){
+	for (auto mem : need_analyse){
 		if (mem.second != 1)
 			throw std::runtime_error("Still has singleness card");
 		CardSet c = CardSet(Single, mem.first);
-		c.add(valueToNum(cardscopy, mem.first));
-		needanalyse[mem.first] = 0;
+		c.add(valueToNum(cards_copy, mem.first));
+        need_analyse[mem.first] = 0;
 		analyse.push_back(c);
 	}
 	//删除分析堆中数量为零的元素
-	updateMap(needanalyse);
+	updateMap(need_analyse);
 
 	deleteUnknown();
 	sort(analyse.begin(), analyse.end(), cmp);
@@ -507,26 +507,26 @@ void Player::divideIntoGroups()
 void Player::threePlusAndAirplane()
 {
 	int n,
-		doublecount = 0,//统计对子的数量，方便下面的整合
-		singlecount = 0;//统计单张数量
+		double_count = 0,//统计对子的数量，方便下面的整合
+		single_count = 0;//统计单张数量
 
 	for (auto mem : analyse){
 		if (mem.getType() == Single)
-			++singlecount;
+			++single_count;
 		else if (mem.getType() == Double)
-			++doublecount;
+			++double_count;
 	}
 
 	for (auto mem : analyse){//完善飞机
 		if (mem.getType() == ThreeSeq){
 			n = mem.getCnt() / 3;
-			if (singlecount >= n){
+			if (single_count >= n){
 				for (auto temp : analyse){
 					if (temp.getType() == Single){
 						for (auto m : temp.getCards())
 							mem.add(m);
 						temp.setType(Void);
-						--singlecount;
+						--single_count;
 						--n;
 					}
 					if (!n){
@@ -535,13 +535,13 @@ void Player::threePlusAndAirplane()
 					}
 				}
 			}
-			else if (doublecount >= n){
+			else if (double_count >= n){
 				for (auto temp : analyse){
 					if (temp.getType() == Double){
 						for (auto m : temp.getCards())
 							mem.add(m);
 						temp.setType(Void);
-						--doublecount;
+						--double_count;
 						--n;
 					}
 					if (!n){
@@ -554,25 +554,25 @@ void Player::threePlusAndAirplane()
 	}
 	for (auto mem : analyse){//完善三带一
 		if (mem.getType() == Three){
-			if (singlecount){
+			if (single_count){
 				for (auto temp : analyse){
 					if (temp.getType() == Single){
 						for (auto m : temp.getCards())
 							mem.add(m);
 						temp.setType(Void);
-						--singlecount;
+						--single_count;
 						mem.setType(ThreePlus);
 						break;
 					}
 				}
 			}
-			else if (doublecount){
+			else if (double_count){
 				for (auto temp : analyse){
 					if (temp.getType() == Double){
 						for (auto m : temp.getCards())
 							mem.add(m);
 						temp.setType(Void);
-						--doublecount;
+						--double_count;
 						mem.setType(ThreePlus);
 						break;
 					}
@@ -673,9 +673,10 @@ void Player::selfDiscard(Player* last_player, Player* landlord, Player* prev_pla
 			}
 
 		}
-		else{//下家为敌方剩1牌
-			//待实现！！
-			//思路是尽量不出单牌，只有单牌了的话就从大到小出
+		else{
+		    //下家为敌方剩1牌
+			//待实现
+
 		}
 	}
 	//正常顺序出牌：(A以上的牌尽量不直接出、炸弹不直接出)
@@ -688,7 +689,7 @@ void Player::selfDiscard(Player* last_player, Player* landlord, Player* prev_pla
 		return;
 	}
 	select_set = analyse[0];
-	return;
+
 }
 
 
@@ -708,12 +709,12 @@ void Player::friendDiscard(Player* last_player, Player* landlord, Player* prev_p
 	}
 	if (analyse.size() > 2 && select_set.getValue() > 14)
 		select_set.reset();//手牌手数大于2，并且所选牌权值大于14（A），则不出牌
-	return;
+
 }
 
 void Player::enemyDiscard(bool hint,Player* last_player, Player* landlord, Player* prev_player, Player* next_player)
 {
-	auto lastdiscard = last_player->discard_set;//敌方出牌
+	auto last_discard = last_player->discard_set;//敌方出牌
 
 	//拆成基本牌
 	analyse.clear();
@@ -721,16 +722,16 @@ void Player::enemyDiscard(bool hint,Player* last_player, Player* landlord, Playe
 	sort(analyse.begin(), analyse.end(), cmp);
 
 	for (auto mem : analyse){//查看是否有相应牌，并且权值大
-		if (mem.getType() == lastdiscard.getType() &&
-			mem.getCnt() == lastdiscard.getCnt() &&
-			mem.getValue() > lastdiscard.getValue()){
+		if (mem.getType() == last_discard.getType() &&
+			mem.getCnt() == last_discard.getCnt() &&
+			mem.getValue() > last_discard.getValue()){
 
 			select_set = mem;
 			return;
 		}
 	}
 	//需要拆牌
-	switch (lastdiscard.getType()){
+	switch (last_discard.getType()){
 	case Single://敌方出的是单牌
 		getSingle(last_player);
 		break;
@@ -754,7 +755,7 @@ void Player::enemyDiscard(bool hint,Player* last_player, Player* landlord, Playe
 	if (select_set.getCnt())
 		return;
 	//敌方剩一张牌，或有适合的炸弹，就出炸弹
-	if (hint || lastdiscard.getCnt() > 3 || lastdiscard.getValue() > 14){
+	if (hint || last_discard.getCnt() > 3 || last_discard.getValue() > 14){
 		for (auto mem : analyse){
 			if (mem.getType() == Bomb){
 				if (last_player->discard_set.getType() == Bomb &&//如果别人最后出牌为炸弹，
@@ -765,7 +766,7 @@ void Player::enemyDiscard(bool hint,Player* last_player, Player* landlord, Playe
 			}
 		}
 	}
-	return;
+
 }
 
 //电脑出牌
@@ -1039,17 +1040,17 @@ void Player::getAirplane(Player *last_player)
 bool Player::discardAndClear()
 {
 	discard_set = select_set;//把选牌放入出牌区：打出选牌
-	bool needclear = true;//本次出牌是否为拆牌，需要更新分析牌堆
+	bool need_clear = true;//本次出牌是否为拆牌，需要更新分析牌堆
 	for (auto b = analyse.begin(); b != analyse.end(); ++b){
 		if ((*b).getType() == select_set.getType() &&
 			(*b).getValue() == select_set.getValue() &&
 			(*b).getCnt() == select_set.getCnt()){//不是拆牌
 			analyse.erase(b);
-			needclear = false;//不需要清空
+            need_clear = false;//不需要清空
 			break;
 		}
 	}
-	if (needclear)//需要清空，下次出牌要重新分析
+	if (need_clear)//需要清空，下次出牌要重新分析
 		analyse.clear();
 
 	for (auto mem : select_set.getCards()){
@@ -1063,7 +1064,6 @@ void Player::pass()
 {
 	no_discard = true;
 	select_set.reset();
-	return;
 }
 
 
@@ -1095,14 +1095,14 @@ int Player::valueToNum(std::set<int> cards_copy, int value)
 
 void Player::updateMap(std::map<int, int> &m)
 {
-	bool notcomplete = true;
-	while (notcomplete){
-		notcomplete = false;
+	bool not_complete = true;
+	while (not_complete){
+        not_complete = false;
 		auto b = m.begin();
 		for (; b != m.end(); ++b){
 			if (b->second == 0){
 				m.erase(b);
-				notcomplete = true;
+                not_complete = true;
 				break;
 			}
 		}
