@@ -62,29 +62,26 @@ void Game::discard() {
         current_player->discard_set.reset();
         current_player->no_discard = false;
     }
-    // Scene.ShowScene
+    // TODO Scene.ShowScene
     if(current_player == player[0]){//当前玩家为人
         if(current_player ->select_set.getCnt() && current_player->humanDiscard(last_player)) {//玩家已选牌并且符合规定
-            //Scene Hide Discard Button
+            //TODO Scene Hide Discard Button
             last_player = current_player;
             if (current_player->discard_set.getType() == Bomb) //炸弹加倍
                 times++;
         }
         else{//否则继续等待玩家选牌
-            //Scene.ShowScene
-            //Scene.Show Discard Button
+            // TODO Scene.ShowScene
+            //TODO Scene.Show Discard Button
         }
     }
     else{
         current_player->selectCards(last_player, landlord, prevPlayer(), nextPlayer());
-        if(current_player->humanDiscard(last_player))
-            last_player = current_player;
-        if(current_player->discard_set.getType() == Bomb)
-            times++;
+        if(current_player->humanDiscard(last_player)) last_player = current_player;
+        if(current_player->discard_set.getType() == Bomb) times++;
     }
-    //Scene.ShowScene
-    if(last_player->cards.empty());
-        //status = GAMEOVER;
+    //TODO Scene.ShowScene
+    if(last_player->cards.empty()) stage_ = GAMEOVER;
     else current_player = nextPlayer();
 
 }
@@ -150,5 +147,33 @@ void Game::main(){
 }
 
 void getLandlord() {
+
+}
+
+
+void Game::gameOver() {
+    // XXX 目前不打算加分数显示，之后可考虑加上
+    int score = base_score*times;
+    bool is_people_win = 0; //人类玩家赢了吗
+    current_player = landlord; //把地主设为当前玩家，方便获取上家和下家
+    if(!landlord->cards.empty()){ //地主牌不为0，农民胜利
+        landlord->score -= score*2;
+        prevPlayer()->score += score, nextPlayer()->score += score;
+        if(player[0] != landlord)   is_people_win = 1;
+    }
+    else{ //地主赢了
+        landlord->score += score*2;
+        prevPlayer()->score -= score, nextPlayer()->score -= score;
+        if(player[0] == landlord) is_people_win = 1;
+    }
+    // TODO show scene
+
+    /*
+    if (is_people_win)
+        //TODO A Message Box shows that Player wins
+    else // TODO A Message Box shows that Player loses
+
+    //TODO restart or quit
+    */
 
 }

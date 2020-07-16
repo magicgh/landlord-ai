@@ -23,6 +23,7 @@ protected:
     CardSet discard_set ;//出牌集合
     std::vector<CardSet> analyse; //分析后拆分的牌型集合
     CardSet select_set; //选牌集合
+    int score;
 public:
     Player();
     void reset();
