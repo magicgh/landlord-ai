@@ -2,7 +2,7 @@
 ## Description
 A landlord game with AI.
 ## Background
-This game is accomplished by a group of university students as a pratical training.
+This game is accomplished by a group of university students as a practical project.
 ## Install
 You can have this projct locally installed to run it.
 ## Usage
