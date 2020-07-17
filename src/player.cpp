@@ -82,7 +82,7 @@ void Player::analyseSelection()
 		select_set.setValue(17);
 		return;
 	}
-//找出相同牌面的最大数量，和最大权值
+	//找出相同牌面的最大数量，和最大权值
 	for (auto mem : select_set.getCardSet()){
 		if (mem.second >= NumMax && mem.first > ValueMax){
 			NumMax = mem.second;
@@ -1048,17 +1048,101 @@ bool Player::discardAndClear()
 			(*b).getCnt() == select_set.getCnt()){//不是拆牌
 
 			// 删除手牌
-			int cnt = 0;
-			auto it = cards.begin();
-			while(it != cards.end() && cnt != (*b).getCnt()) {
-				if(CardSet::convert(*it) == (*b).getValue()) {
-					discards.insert(*it);
-					cnt++;
-					it = cards.erase(it);
+			if(select_set.getType() == ThreePlus) {
+				// 三带一(或对)
+				int cnt = 0, flag = 1, fcnt = 0;
+				auto it = cards.begin();
+				while(it != cards.end() && cnt != (*b).getCnt()) {
+					if(CardSet::convert(*it) == (*b).getValue()) {
+						discards.insert(*it);
+						cnt++;
+						it = cards.erase(it);
+					}
+					else if(flag && select_set.getCards().find(*it) != select_set.getCards().end()) {
+						discards.insert(*it);
+						cnt++;
+						it = cards.erase(it);
+						if((*b).getCnt() == 4)
+							flag = false;
+						if(++fcnt == 2)
+							flag = false;
+					}
+					else
+						++it;
 				}
-				else
-					++it;
 			}
+			else if(select_set.getType() == ThreePlus) {
+				// 单顺
+				int cnt = 0;
+				std::set<int> tmp;
+				auto it = cards.begin();
+				while(it != cards.end() && cnt != (*b).getCnt()) {
+					if(select_set.getCards().find(CardSet::convert(*it)) != select_set.getCards().end()
+						&& tmp.find(CardSet::convert(*it)) == tmp.end()) {
+						tmp.insert(CardSet::convert(*it));
+						discards.insert(*it);
+						cnt++;
+						it = cards.erase(it);
+					}
+					else
+						++it;
+				}
+			}
+			else if(select_set.getType() == DoubleSeq) {
+				// 双顺
+				int cnt = 0;
+				std::map<int, int> tmp;
+				auto it = cards.begin();
+				while(it != cards.end() && cnt != (*b).getCnt()) {
+					if(select_set.getCards().find(CardSet::convert(*it)) != select_set.getCards().end()
+						&& (tmp.count(CardSet::convert(*it)) == 0  || tmp[CardSet::convert(*it)] < 2)) {
+						tmp[CardSet::convert(*it)]++;
+						discards.insert(*it);
+						cnt++;
+						it = cards.erase(it);
+					}
+					else
+						++it;
+				}
+			}
+			else if(select_set.getType() == Bomb) {
+				if(select_set.getValue() != 17) {
+					// 普通炸弹
+					int cnt = 0;
+					auto it = cards.begin();
+					while(it != cards.end() && cnt != (*b).getCnt()) {
+						if(CardSet::convert(*it) == (*b).getValue()) {
+							discards.insert(*it);
+							cnt++;
+							it = cards.erase(it);
+						}
+						else
+							++it;
+					}
+				}
+				else {
+					// 王炸
+					cards.erase(52);
+					cards.erase(53);
+					discards.insert(52);
+					discards.insert(53);
+				}
+			}
+			else {
+				// 单出，对，三条
+				int cnt = 0;
+				auto it = cards.begin();
+				while(it != cards.end() && cnt != (*b).getCnt()) {
+					if(CardSet::convert(*it) == (*b).getValue()) {
+						discards.insert(*it);
+						cnt++;
+						it = cards.erase(it);
+					}
+					else
+						++it;
+				}
+			}
+			
 
 			b = analyse.erase(b);
             need_clear = false;//不需要清空
