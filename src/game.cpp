@@ -8,6 +8,7 @@ void Game::update() {
     game_scene.sethand(player[0]->cards);
     game_scene.setselect(player[0]->select_set.getCards());
     game_scene.setdeal(player[0]->discard_set.getCards(),player[1]->getDiscardCards(),player[2]->getDiscardCards());
+    game_scene.setnum(player[1]->cards.size(),player[2]->cards.size());
 }
 
 Game::Game() {
