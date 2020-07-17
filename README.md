@@ -17,3 +17,7 @@ This game is accomplished by a group of university students as a practical proje
 *  [liyuxuanzzz](https://github.com/liyuxuanzzz)
 *  [CaoJZ-01](https://github.com/CaoJZ-01)
 *  [Fobow](https://github.com/Fobow)
+# ScreenShot
+![landlord-1.png](https://i.loli.net/2020/07/17/lXndgZ2iKGupzT3.png)
+![landlord-2.png](https://i.loli.net/2020/07/17/dxFHWYv1SMReoh2.png)
+![landlord-3.png](https://i.loli.net/2020/07/17/8ConIAJG3DFuHEB.png)
