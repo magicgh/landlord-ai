@@ -1077,7 +1077,7 @@ bool Player::discardAndClear()
 				std::set<int> tmp;
 				auto it = cards.begin();
 				while(it != cards.end() && cnt != (*b).getCnt()) {
-					if(select_set.getCards().find(CardSet::convert(*it)) != select_set.getCards().end()
+					if(select_set.getCards().find(*it) != select_set.getCards().end()
 						&& tmp.find(CardSet::convert(*it)) == tmp.end()) {
 						tmp.insert(CardSet::convert(*it));
 						discards.insert(*it);
