@@ -299,6 +299,7 @@ void Game::main(){
                     player[i]->cards.clear();
                     player[i]->discard_set.reset();
                     player[i]->select_set.reset();
+                    player[i]->discards.clear();
                 }
                 
                 // 洗牌
@@ -311,7 +312,6 @@ void Game::main(){
 
                 stage_ = GETLANDLORD; // 进行叫地主阶段
 
-                // TODO: game_scene显示玩家手牌
                 break;
 
             case GETLANDLORD:
